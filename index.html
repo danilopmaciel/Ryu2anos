@@ -57,7 +57,7 @@
 
     <footer class="bg-tire-black text-white py-8 mt-12 text-center border-t-8 border-rusteze-yellow">
         <p class="font-racing text-xl">Obrigado por participar!</p>
-        <p class="text-xs text-gray-500 mt-2">Versão 3.0 (PNG)</p>
+        <p class="text-xs text-gray-500 mt-2">Versão 4.0 (Pix Corrigido)</p>
     </footer>
 
     <!-- Modal de Pagamento -->
@@ -76,10 +76,10 @@
             <form id="payment-form" onsubmit="handlePayment(event)">
                 <input type="text" id="donor-name" required placeholder="Seu Nome (Ex: Tio Mate)" class="w-full border-2 p-3 rounded mb-4 focus:border-mcqueen-red outline-none">
                 
-                <div id="pix-area" class="hidden text-center mb-4">
+                <div id="pix-area" class="hidden text-center mb-4 transition-all">
                     <img id="pix-qrcode" src="" class="w-40 h-40 mx-auto mb-2 border p-1">
-                    <input type="text" id="pix-key-display" readonly class="w-full text-xs bg-gray-100 p-2 rounded mb-2 text-center" onclick="this.select()">
-                    <button type="button" onclick="copyPix()" class="text-sm text-mcqueen-red font-bold uppercase">Copiar Código Pix</button>
+                    <input type="text" id="pix-key-display" readonly class="w-full text-xs bg-gray-100 p-2 rounded mb-2 text-center text-gray-500" onclick="this.select()">
+                    <button type="button" onclick="copyPix()" class="text-sm text-mcqueen-red font-bold uppercase hover:underline">Copiar Código Pix</button>
                 </div>
 
                 <button type="submit" id="btn-action" class="w-full bg-mcqueen-red text-white font-racing py-3 rounded text-xl hover:bg-red-700 transition">Gerar Pix</button>
@@ -270,6 +270,15 @@
             selectedQuotas = parseInt(qtd);
             const total = selectedQuotas * currentGift.quotaValue;
             document.getElementById('modal-total-value').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            
+            // ATUALIZAÇÃO DINÂMICA DO PIX (NOVO)
+            // Se o usuário já gerou o Pix e mudou a quantidade, regenera na hora
+            const pixArea = document.getElementById('pix-area');
+            if (!pixArea.classList.contains('hidden')) {
+                const payload = generatePix(PIX_KEY, PIX_NAME, PIX_CITY, total.toFixed(2), "Presente2Anos");
+                document.getElementById('pix-key-display').value = payload;
+                document.getElementById('pix-qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(payload)}`;
+            }
         };
 
         window.closeModal = () => document.getElementById('checkout-modal').classList.add('hidden');
@@ -318,20 +327,36 @@
             }
         };
 
+        // GERADOR PIX CORRIGIDO (Adicionado tamanho do campo 26 e máscara de bits)
         function generatePix(key, name, city, amount, txid) {
             const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
             const format = (id, val) => id + val.length.toString().padStart(2, '0') + val;
             
-            let p = "00020126" + format("00", "br.gov.bcb.pix") + format("01", key);
-            p += format("52", "0000") + format("53", "986") + format("54", amount);
-            p += format("58", "BR") + format("59", normalize(name).substring(0, 25)) + format("60", normalize(city).substring(0, 15));
-            p += format("62", format("05", txid || "***")) + "6304";
+            let p = "000201";
+            // Correção Crítica: O campo 26 agora calcula o tamanho do seu conteúdo (GUI + Chave)
+            const merchantInfo = format("00", "br.gov.bcb.pix") + format("01", key);
+            p += format("26", merchantInfo);
+            
+            p += format("52", "0000");
+            p += format("53", "986");
+            p += format("54", amount);
+            p += format("58", "BR");
+            p += format("59", normalize(name).substring(0, 25));
+            p += format("60", normalize(city).substring(0, 15));
+            p += format("62", format("05", txid || "***"));
+            p += "6304";
 
             const poly = 0x1021;
             let crc = 0xFFFF;
             for (let i = 0; i < p.length; i++) {
                 crc ^= (p.charCodeAt(i) << 8);
-                for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? (crc << 1) ^ poly : crc << 1;
+                for (let j = 0; j < 8; j++) {
+                    if ((crc & 0x8000) !== 0) {
+                        crc = ((crc << 1) ^ poly) & 0xFFFF;
+                    } else {
+                        crc = (crc << 1) & 0xFFFF;
+                    }
+                }
             }
             return p + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
         }
