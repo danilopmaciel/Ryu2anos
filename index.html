@@ -36,16 +36,104 @@
             background-image: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%);
             background-size: 20px 20px; height: 20px; width: 100%; background-color: white;
         }
+        
+        /* TELA DE BOAS-VINDAS (SPLASH SCREEN) */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #D71920; /* Vermelho McQueen */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        /* Botão de Controle de Áudio Flutuante */
+        .audio-control-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+            opacity: 0; /* Começa invisível */
+            transition: opacity 0.5s;
+        }
+        .audio-control-container.visible { opacity: 1; }
+
+        .control-btn {
+            background-color: #FACC15;
+            color: #D71920;
+            font-family: 'Racing Sans One', cursive;
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+            font-size: 0.9rem;
+        }
+        .control-btn:hover { transform: scale(1.05); }
+        .control-btn.stopped { background-color: #ef4444; color: white; border-color: #ef4444; }
+        
+        /* Botão gigante da entrada */
+        .start-btn {
+            font-size: 2rem;
+            padding: 20px 40px;
+            background: #FACC15;
+            color: #D71920;
+            border: 4px solid white;
+            border-radius: 50px;
+            font-family: 'Racing Sans One', cursive;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            animation: pulse-start 1.5s infinite;
+        }
+        .start-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+        }
+
+        @keyframes pulse-start {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 overflow-hidden"> <!-- overflow-hidden impede rolagem inicial -->
+
+    <!-- TELA DE BOAS VINDAS (Garante o play no celular) -->
+    <div id="splash-screen">
+        <h1 class="font-racing text-white text-4xl md:text-6xl mb-8 text-center px-4 drop-shadow-lg">
+            Pit Stop do Theo Ryu
+        </h1>
+        <div class="checkered-flag w-full max-w-md h-4 mb-8"></div>
+        <button onclick="startExperience()" class="start-btn flex items-center gap-3">
+            <i class="fas fa-flag-checkered"></i> DAR A PARTIDA
+        </button>
+        <p class="text-white mt-6 text-sm opacity-80">Toque para entrar na festa!</p>
+    </div>
+
+    <!-- Elemento de Áudio Invisível -->
+    <audio id="bg-audio" src="mcqueen.m4a" loop preload="auto"></audio>
+
+    <!-- Botão Flutuante de Controle (Mute) -->
+    <div id="audio-controls" class="audio-control-container">
+        <button id="toggle-btn" onclick="togglePlayback()" class="control-btn">
+            <i class="fas fa-volume-up"></i> Som Ligado
+        </button>
+    </div>
 
     <div class="checkered-flag"></div>
 
     <header class="bg-mcqueen-red text-white text-center py-10 px-4 border-b-8 border-rusteze-yellow relative overflow-hidden">
         <div class="relative z-10 max-w-4xl mx-auto">
             <h1 class="font-racing text-5xl md:text-7xl mb-2 text-shadow">Pit Stop do Theo Ryu</h1>
-            <p class="text-xl font-light">2 Anos de pura velocidade!</p>
+            <p class="text-xl font-light mb-2">2 Anos de pura velocidade!</p>
         </div>
     </header>
 
@@ -57,7 +145,7 @@
 
     <footer class="bg-tire-black text-white py-8 mt-12 text-center border-t-8 border-rusteze-yellow">
         <p class="font-racing text-xl">Obrigado por participar!</p>
-        <p class="text-xs text-gray-500 mt-2">Versão 4.0 (Pix Corrigido)</p>
+        <p class="text-xs text-gray-500 mt-2">Versão 11.0 (Áudio m4a)</p>
     </footer>
 
     <!-- Modal de Pagamento -->
@@ -92,7 +180,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyA0p0CtQn66ppjWVZ6ECKTJvYg4W6nfLss",
             authDomain: "ryu2anos.firebaseapp.com",
@@ -107,71 +194,14 @@
         const PIX_NAME = "Danilo Pires Maciel"; 
         const PIX_CITY = "Bauru";
 
-        // DADOS EXATOS (Nomes .png conforme seu GitHub)
         const giftsData = [
-            {
-                id: "item_01",
-                title: "Hot Wheels Color Shifters (Muda de Cor)",
-                image: "hotwheelscolor.png", 
-                totalValue: 66,
-                quotaValue: 22.00,
-                totalQuotas: 3,
-                icon: "fa-car"
-            },
-            {
-                id: "item_02",
-                title: "Brinquedo Educativo Montessori 3x1",
-                image: "educativo.png", 
-                totalValue: 235,
-                quotaValue: 19.60, 
-                totalQuotas: 12,
-                icon: "fa-puzzle-piece"
-            },
-            {
-                id: "item_03",
-                title: "Barraca Infantil de Praia/Camping",
-                image: "cabana.png",
-                totalValue: 206,
-                quotaValue: 20.60,
-                totalQuotas: 10,
-                icon: "fa-campground"
-            },
-            {
-                id: "item_04",
-                title: "Saco de Pancada Inflável (Boxe)",
-                image: "boxe.png", 
-                totalValue: 136,
-                quotaValue: 19.50, 
-                totalQuotas: 7,
-                icon: "fa-fist-raised"
-            },
-            {
-                id: "item_05",
-                title: "Mesa Infantil MDF com 2 Cadeiras",
-                image: "mesa.png", 
-                totalValue: 250,
-                quotaValue: 20.85, 
-                totalQuotas: 12,
-                icon: "fa-chair"
-            },
-            {
-                id: "item_06",
-                title: "Patinete Relâmpago McQueen",
-                image: "patinete.png", 
-                totalValue: 192,
-                quotaValue: 19.20,
-                totalQuotas: 10,
-                icon: "fa-bolt"
-            },
-            {
-                id: "item_07",
-                title: "Pista Hot Wheels F1 Race Sprint",
-                image: "psitahotwheelsF1.png", 
-                totalValue: 450,
-                quotaValue: 20.50,
-                totalQuotas: 22,
-                icon: "fa-road"
-            }
+            { id: "item_01", title: "Hot Wheels Color Shifters (Muda de Cor)", image: "hotwheelscolor.png", totalValue: 66, quotaValue: 22.00, totalQuotas: 3, icon: "fa-car" },
+            { id: "item_02", title: "Brinquedo Educativo Montessori 3x1", image: "educativo.png", totalValue: 235, quotaValue: 19.60, totalQuotas: 12, icon: "fa-puzzle-piece" },
+            { id: "item_03", title: "Barraca Infantil de Praia/Camping", image: "cabana.png", totalValue: 206, quotaValue: 20.60, totalQuotas: 10, icon: "fa-campground" },
+            { id: "item_04", title: "Saco de Pancada Inflável (Boxe)", image: "boxe.png", totalValue: 136, quotaValue: 19.50, totalQuotas: 7, icon: "fa-fist-raised" },
+            { id: "item_05", title: "Mesa Infantil MDF com 2 Cadeiras", image: "mesa.png", totalValue: 250, quotaValue: 20.85, totalQuotas: 12, icon: "fa-chair" },
+            { id: "item_06", title: "Patinete Relâmpago McQueen", image: "patinete.png", totalValue: 192, quotaValue: 19.20, totalQuotas: 10, icon: "fa-bolt" },
+            { id: "item_07", title: "Pista Hot Wheels F1 Race Sprint", image: "psitahotwheelsF1.png", totalValue: 450, quotaValue: 20.50, totalQuotas: 22, icon: "fa-road" }
         ];
 
         let db;
@@ -180,18 +210,63 @@
         let currentGift = null;
         let selectedQuotas = 1;
 
-        // 1. Renderiza Imediatamente
-        renderGifts();
+        // --- LÓGICA DE ÁUDIO (M4A) ---
+        const audio = document.getElementById('bg-audio');
+        const btn = document.getElementById('toggle-btn');
+        let isPlaying = false;
 
-        // 2. Conecta Firebase
+        // Função chamada ao clicar no botão "DAR A PARTIDA"
+        window.startExperience = () => {
+            const splash = document.getElementById('splash-screen');
+            const audioControls = document.getElementById('audio-controls');
+            
+            // Toca o áudio
+            audio.volume = 0.7;
+            audio.play().then(() => {
+                isPlaying = true;
+                updateButtonState();
+            }).catch(e => console.error("Erro ao tocar áudio:", e));
+
+            // Efeito visual de saída
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                document.body.classList.remove('overflow-hidden'); // Libera rolagem
+                audioControls.classList.add('visible'); // Mostra botão de mute
+            }, 500);
+        };
+
+        // Controle de Play/Pause
+        window.togglePlayback = () => {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play();
+                isPlaying = true;
+            }
+            updateButtonState();
+        };
+
+        function updateButtonState() {
+            if (isPlaying) {
+                btn.innerHTML = '<i class="fas fa-volume-up"></i> Som Ligado';
+                btn.classList.remove('stopped');
+            } else {
+                btn.innerHTML = '<i class="fas fa-volume-mute"></i> Som Mudo';
+                btn.classList.add('stopped');
+            }
+        }
+        // --- FIM LÓGICA ÁUDIO ---
+
+        // Renderiza e conecta Firebase
+        renderGifts();
         try {
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             isFirebaseActive = true;
             listenToUpdates();
-        } catch (e) {
-            console.error("Modo Offline (Firebase falhou):", e);
-        }
+        } catch (e) { console.error("Modo Offline:", e); }
 
         function listenToUpdates() {
             onSnapshot(collection(db, "status_presentes"), (snapshot) => {
@@ -243,7 +318,6 @@
             });
         }
 
-        // Funções Globais
         window.openCheckout = (giftId) => {
             currentGift = giftsData.find(g => g.id === giftId);
             const taken = quotasTakenMap[giftId] || 0;
@@ -271,8 +345,6 @@
             const total = selectedQuotas * currentGift.quotaValue;
             document.getElementById('modal-total-value').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             
-            // ATUALIZAÇÃO DINÂMICA DO PIX (NOVO)
-            // Se o usuário já gerou o Pix e mudou a quantidade, regenera na hora
             const pixArea = document.getElementById('pix-area');
             if (!pixArea.classList.contains('hidden')) {
                 const payload = generatePix(PIX_KEY, PIX_NAME, PIX_CITY, total.toFixed(2), "Presente2Anos");
@@ -327,13 +399,11 @@
             }
         };
 
-        // GERADOR PIX CORRIGIDO (Adicionado tamanho do campo 26 e máscara de bits)
         function generatePix(key, name, city, amount, txid) {
             const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
             const format = (id, val) => id + val.length.toString().padStart(2, '0') + val;
             
             let p = "000201";
-            // Correção Crítica: O campo 26 agora calcula o tamanho do seu conteúdo (GUI + Chave)
             const merchantInfo = format("00", "br.gov.bcb.pix") + format("01", key);
             p += format("26", merchantInfo);
             
