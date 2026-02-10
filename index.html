@@ -57,6 +57,7 @@
 
     <footer class="bg-tire-black text-white py-8 mt-12 text-center border-t-8 border-rusteze-yellow">
         <p class="font-racing text-xl">Obrigado por participar!</p>
+        <p class="text-xs text-gray-500 mt-2">Versão 3.0 (PNG)</p>
     </footer>
 
     <!-- Modal de Pagamento -->
@@ -106,7 +107,7 @@
         const PIX_NAME = "Danilo Pires Maciel"; 
         const PIX_CITY = "Bauru";
 
-        // DADOS EXATOS DA SUA LISTA
+        // DADOS EXATOS (Nomes .png conforme seu GitHub)
         const giftsData = [
             {
                 id: "item_01",
@@ -216,7 +217,8 @@
                     <div class="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
                         <img src="${gift.image}" 
                              alt="${gift.title}" 
-                             class="w-full h-full object-contain transition transform group-hover:scale-110">
+                             class="w-full h-full object-contain transition transform group-hover:scale-110"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/e5e7eb/a3a3a3?text=Erro:+${gift.image}'; this.style.border='4px solid red';">
                         <div class="absolute bottom-0 right-0 bg-rusteze-yellow text-mcqueen-red px-3 py-1 font-bold text-xs rounded-tl-lg">
                             <i class="fas ${gift.icon}"></i> Cota: R$ ${gift.quotaValue.toFixed(2).replace('.', ',')}
                         </div>
