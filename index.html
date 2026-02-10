@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pit Stop do Theo Ryu - Lista de Presentes</title>
     
-    <!-- Tailwind CSS para estilização rápida -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fontes do Google: Racing Sans One para títulos -->
+    <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Configuração do Tema Carros -->
     <script>
         tailwind.config = {
             theme: {
@@ -22,8 +19,7 @@
                     colors: {
                         'mcqueen-red': '#D71920',
                         'rusteze-yellow': '#FACC15',
-                        'tire-black': '#1c1c1c',
-                        'asphalt': '#333333'
+                        'tire-black': '#1c1c1c'
                     },
                     fontFamily: {
                         'racing': ['"Racing Sans One"', 'cursive'],
@@ -33,166 +29,69 @@
             }
         }
     </script>
-
+    
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
-            background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23e5e7eb" fill-opacity="0.4" fill-rule="evenodd"%3E%3Cpath d="M0 40L40 0H20L0 20M40 40V20L20 40"/%3E%3C/g%3E%3C/svg%3E');
-        }
-
+        body { font-family: 'Roboto', sans-serif; background-color: #f3f4f6; }
         .checkered-flag {
-            background-image: 
-                linear-gradient(45deg, #000 25%, transparent 25%), 
-                linear-gradient(-45deg, #000 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #000 75%), 
-                linear-gradient(-45deg, transparent 75%, #000 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            height: 20px;
-            width: 100%;
-            background-color: white;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(215, 25, 32, 0.4);
-        }
-
-        /* Animação do modal */
-        .modal-enter {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        .modal-enter-active {
-            opacity: 1;
-            transform: scale(1);
-            transition: opacity 300ms, transform 300ms;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%);
+            background-size: 20px 20px; height: 20px; width: 100%; background-color: white;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Faixa Quadriculada Topo -->
     <div class="checkered-flag"></div>
 
-    <!-- Header -->
-    <header class="bg-mcqueen-red text-white text-center py-10 px-4 relative overflow-hidden border-b-8 border-rusteze-yellow">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <i class="fas fa-bolt text-9xl absolute -left-10 top-0 transform -rotate-12"></i>
-            <i class="fas fa-flag-checkered text-9xl absolute -right-10 bottom-0 transform rotate-12"></i>
-        </div>
-        
+    <header class="bg-mcqueen-red text-white text-center py-10 px-4 border-b-8 border-rusteze-yellow relative overflow-hidden">
         <div class="relative z-10 max-w-4xl mx-auto">
-            <div class="inline-block bg-rusteze-yellow text-mcqueen-red px-4 py-1 rounded-full font-bold text-sm mb-4 transform -skew-x-12 border-2 border-white shadow-lg">
-                <span class="inline-block transform skew-x-12">KA-CHOW! ⚡</span>
-            </div>
             <h1 class="font-racing text-5xl md:text-7xl mb-2 text-shadow">Pit Stop do Theo Ryu</h1>
-            <p class="text-xl md:text-2xl font-light opacity-90">2 Anos de pura velocidade!</p>
-            
-            <div class="mt-6">
-                <div class="bg-white/20 backdrop-blur-sm p-4 rounded-lg inline-block max-w-2xl">
-                    <p class="text-sm md:text-base font-medium">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Para acertar em cheio no presente, criamos este Pit Stop! 
-                        Escolha uma cota de um presente abaixo e ajude a equipar nossa garagem.
-                    </p>
-                </div>
-            </div>
+            <p class="text-xl font-light">2 Anos de pura velocidade!</p>
         </div>
     </header>
 
-    <!-- Conteúdo Principal -->
     <main class="max-w-6xl mx-auto px-4 py-12">
-        
-        <!-- Grid de Presentes -->
         <div id="gifts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Os cards serão gerados via JavaScript -->
-            <div class="col-span-full text-center py-12">
-                <i class="fas fa-circle-notch fa-spin text-4xl text-mcqueen-red"></i>
-                <p class="mt-4 text-gray-500">Carregando a garagem...</p>
-            </div>
+            <!-- Os presentes aparecem aqui -->
         </div>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-tire-black text-white py-8 mt-12 border-t-8 border-rusteze-yellow">
-        <div class="container mx-auto text-center px-4">
-            <i class="fas fa-trophy text-rusteze-yellow text-3xl mb-4"></i>
-            <p class="font-racing text-xl">Obrigado por fazer parte dessa corrida!</p>
-            <p class="text-gray-500 text-sm mt-2">Desenvolvido com carinho para o aniversário do Theo Ryu</p>
-        </div>
-        <div class="checkered-flag mt-6"></div>
+    <footer class="bg-tire-black text-white py-8 mt-12 text-center border-t-8 border-rusteze-yellow">
+        <p class="font-racing text-xl">Obrigado por participar!</p>
     </footer>
 
     <!-- Modal de Pagamento -->
     <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-70 backdrop-blur-sm px-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all border-4 border-mcqueen-red relative">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative border-4 border-mcqueen-red">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
             
-            <!-- Cabeçalho Modal -->
-            <div class="bg-mcqueen-red p-4 text-white flex justify-between items-center">
-                <h3 class="font-racing text-2xl"><i class="fas fa-gas-pump mr-2"></i> Abastecer Presente</h3>
-                <button onclick="closeModal()" class="text-white hover:text-rusteze-yellow transition">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+            <h3 class="font-racing text-2xl text-mcqueen-red mb-4">Abastecer Presente</h3>
+            
+            <div class="bg-gray-100 p-4 rounded mb-4">
+                <h4 id="modal-gift-name" class="font-bold">Presente</h4>
+                <p class="text-sm text-gray-600">Total: <span id="modal-total-value" class="font-bold text-mcqueen-red text-lg"></span></p>
+                <div id="modal-cotas-wrapper" class="mt-2"></div>
             </div>
 
-            <!-- Corpo Modal -->
-            <div class="p-6">
-                <!-- Resumo -->
-                <div class="bg-gray-100 p-4 rounded-lg mb-6 border-l-4 border-rusteze-yellow">
-                    <p class="text-sm text-gray-500 uppercase tracking-wide font-bold">Você escolheu:</p>
-                    <h4 id="modal-gift-name" class="font-bold text-lg text-gray-800">Nome do Presente</h4>
-                    <div class="flex justify-between items-end mt-2">
-                        <span class="text-sm text-gray-600"><span id="modal-cotas-count">0</span> cota(s)</span>
-                        <span id="modal-total-value" class="text-2xl font-racing text-mcqueen-red">R$ 0,00</span>
-                    </div>
+            <form id="payment-form" onsubmit="handlePayment(event)">
+                <input type="text" id="donor-name" required placeholder="Seu Nome (Ex: Tio Mate)" class="w-full border-2 p-3 rounded mb-4 focus:border-mcqueen-red outline-none">
+                
+                <div id="pix-area" class="hidden text-center mb-4">
+                    <img id="pix-qrcode" src="" class="w-40 h-40 mx-auto mb-2 border p-1">
+                    <input type="text" id="pix-key-display" readonly class="w-full text-xs bg-gray-100 p-2 rounded mb-2 text-center" onclick="this.select()">
+                    <button type="button" onclick="copyPix()" class="text-sm text-mcqueen-red font-bold uppercase">Copiar Código Pix</button>
                 </div>
 
-                <!-- Formulário -->
-                <form id="payment-form" onsubmit="handlePayment(event)">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2 text-sm">Seu Nome (para agradecermos depois):</label>
-                        <input type="text" id="donor-name" required placeholder="Tio Mate, Vovó Sally..." 
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-mcqueen-red transition bg-gray-50">
-                    </div>
-
-                    <div id="pix-area" class="hidden text-center mb-6 animate-fade-in">
-                        <p class="text-sm font-bold text-gray-700 mb-2">Escaneie o QR Code ou copie a chave:</p>
-                        <!-- QR Code Placeholder -->
-                        <div class="bg-white p-2 inline-block border-2 border-dashed border-gray-300 rounded mb-3">
-                            <img id="pix-qrcode" src="" alt="QR Code Pix" class="w-40 h-40 mx-auto">
-                        </div>
-                        
-                        <div class="flex items-center bg-gray-200 rounded p-2">
-                            <input type="text" id="pix-key-display" readonly class="bg-transparent w-full text-xs font-mono text-gray-600 outline-none" value="">
-                            <button type="button" onclick="copyPix()" class="ml-2 text-mcqueen-red font-bold text-xs uppercase hover:text-red-800">Copiar</button>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2"><i class="fas fa-stopwatch"></i> Envie o comprovante se puder!</p>
-                    </div>
-
-                    <button type="submit" id="btn-action" class="w-full bg-mcqueen-red hover:bg-red-700 text-white font-racing text-xl py-4 rounded-lg shadow-lg transform transition hover:-translate-y-1 hover:shadow-xl flex justify-center items-center">
-                        <span>Gerar Pix</span> <i class="fas fa-qrcode ml-2"></i>
-                    </button>
-                    
-                    <button type="button" id="btn-confirm" onclick="confirmDonation()" class="hidden w-full bg-green-600 hover:bg-green-700 text-white font-racing text-xl py-4 rounded-lg shadow-lg transform transition hover:-translate-y-1 hover:shadow-xl mt-3">
-                        <i class="fas fa-check-circle mr-2"></i> Já fiz o Pix!
-                    </button>
-                </form>
-            </div>
+                <button type="submit" id="btn-action" class="w-full bg-mcqueen-red text-white font-racing py-3 rounded text-xl hover:bg-red-700 transition">Gerar Pix</button>
+                <button type="button" id="btn-confirm" onclick="confirmDonation()" class="hidden w-full bg-green-600 text-white font-racing py-3 rounded text-xl hover:bg-green-700 mt-2">Já fiz o Pix!</button>
+            </form>
         </div>
     </div>
 
-    <!-- Scripts do Firebase e Lógica -->
     <script type="module">
-        // =========================================================================
-        // CONFIGURAÇÃO DO FIREBASE
-        // =========================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ⚠️ CONFIGURAÇÃO ATUALIZADA COM SEUS DADOS DO FIREBASE
+        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyA0p0CtQn66ppjWVZ6ECKTJvYg4W6nfLss",
             authDomain: "ryu2anos.firebaseapp.com",
@@ -203,16 +102,16 @@
             measurementId: "G-MXB7YELLJW"
         };
 
-        // =========================================================================
-        // DADOS DOS PRESENTES - NOVOS BRINQUEDOS
-        // =========================================================================
-        // ATENÇÃO: Salve as imagens no seu computador com ESTES NOMES exatos
-        // e suba no GitHub na mesma pasta deste arquivo index.html.
+        const PIX_KEY = "34830320885";        
+        const PIX_NAME = "Danilo Pires Maciel"; 
+        const PIX_CITY = "Bauru";
+
+        // DADOS EXATOS DA SUA LISTA
         const giftsData = [
             {
                 id: "item_01",
                 title: "Hot Wheels Color Shifters (Muda de Cor)",
-                image: "hotwheels-color.jpg", 
+                image: "hotwheelscolor.png", 
                 totalValue: 66,
                 quotaValue: 22.00,
                 totalQuotas: 3,
@@ -221,7 +120,7 @@
             {
                 id: "item_02",
                 title: "Brinquedo Educativo Montessori 3x1",
-                image: "montessori.jpg", 
+                image: "educativo.png", 
                 totalValue: 235,
                 quotaValue: 19.60, 
                 totalQuotas: 12,
@@ -230,7 +129,7 @@
             {
                 id: "item_03",
                 title: "Barraca Infantil de Praia/Camping",
-                image: "barraca-praia.jpg",
+                image: "cabana.png",
                 totalValue: 206,
                 quotaValue: 20.60,
                 totalQuotas: 10,
@@ -239,16 +138,16 @@
             {
                 id: "item_04",
                 title: "Saco de Pancada Inflável (Boxe)",
-                image: "saco-boxe.jpg", 
+                image: "boxe.png", 
                 totalValue: 136,
-                quotaValue: 19.50, // 7x ~20
+                quotaValue: 19.50, 
                 totalQuotas: 7,
                 icon: "fa-fist-raised"
             },
             {
                 id: "item_05",
                 title: "Mesa Infantil MDF com 2 Cadeiras",
-                image: "mesa-infantil.jpg", 
+                image: "mesa.png", 
                 totalValue: 250,
                 quotaValue: 20.85, 
                 totalQuotas: 12,
@@ -257,7 +156,7 @@
             {
                 id: "item_06",
                 title: "Patinete Relâmpago McQueen",
-                image: "patinete.jpg", 
+                image: "patinete.png", 
                 totalValue: 192,
                 quotaValue: 19.20,
                 totalQuotas: 10,
@@ -266,7 +165,7 @@
             {
                 id: "item_07",
                 title: "Pista Hot Wheels F1 Race Sprint",
-                image: "pista-f1.jpg", 
+                image: "psitahotwheelsF1.png", 
                 totalValue: 450,
                 quotaValue: 20.50,
                 totalQuotas: 22,
@@ -274,312 +173,168 @@
             }
         ];
 
-        // ⚠️ DADOS DO PIX ATUALIZADOS ⚠️
-        const PIX_KEY = "34830320885";        
-        const PIX_NAME = "Danilo Pires Maciel"; 
-        const PIX_CITY = "Bauru";             
-
-        // =========================================================================
-        // LÓGICA DO APLICATIVO
-        // =========================================================================
-        
         let db;
         let isFirebaseActive = false;
+        let quotasTakenMap = {}; 
         let currentGift = null;
         let selectedQuotas = 1;
-        let quotasTakenMap = {}; // Armazena quantas cotas foram compradas de cada item
 
-        // Inicialização
+        // 1. Renderiza Imediatamente
+        renderGifts();
+
+        // 2. Conecta Firebase
         try {
-            // Verifica se o usuário já colocou a API KEY real (não é o texto padrão)
-            if (firebaseConfig.projectId === "ryu2anos") {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                isFirebaseActive = true;
-                listenToUpdates();
-                console.log("Firebase conectado com sucesso!");
-            } else {
-                console.warn("Firebase não configurado. Rodando em modo DEMO (Local).");
-                // Aviso visual para o dono do site saber que falta configurar
-                const aviso = document.createElement('div');
-                aviso.className = "fixed bottom-0 left-0 right-0 bg-yellow-500 text-black text-center p-2 z-50 font-bold";
-                aviso.innerHTML = "⚠️ MODO DEMONSTRAÇÃO: Configure as chaves do Firebase no código para salvar os dados.";
-                document.body.appendChild(aviso);
-                renderGifts(); 
-            }
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            isFirebaseActive = true;
+            listenToUpdates();
         } catch (e) {
-            console.error("Erro ao iniciar Firebase:", e);
-            renderGifts();
+            console.error("Modo Offline (Firebase falhou):", e);
         }
 
-        // Função para ouvir atualizações em tempo real do banco de dados
         function listenToUpdates() {
-            // Escuta a coleção 'contribuicoes' para somar as cotas
-            // Nota: Em produção real, seria melhor ter um documento 'resumo_cotas', 
-            // mas para simplificar vamos ler as contribuições e somar localmente ou
-            // usar um listener em um documento de contadores.
-            
-            // Vamos usar uma coleção "status_presentes" onde o ID do doc é o ID do presente
-            const colRef = collection(db, "status_presentes");
-            
-            onSnapshot(colRef, (snapshot) => {
-                snapshot.docs.forEach(doc => {
-                    quotasTakenMap[doc.id] = doc.data().cotasVendidas || 0;
-                });
+            onSnapshot(collection(db, "status_presentes"), (snapshot) => {
+                snapshot.docs.forEach(doc => quotasTakenMap[doc.id] = doc.data().cotasVendidas || 0);
                 renderGifts();
             });
         }
 
-        // Renderiza os cards na tela
         function renderGifts() {
             const container = document.getElementById('gifts-container');
             container.innerHTML = '';
 
             giftsData.forEach(gift => {
                 const taken = quotasTakenMap[gift.id] || 0;
-                const available = gift.totalQuotas - taken;
                 const percentage = (taken / gift.totalQuotas) * 100;
-                const isSoldOut = available <= 0;
+                const isSoldOut = (gift.totalQuotas - taken) <= 0;
 
-                // Template String do Card
-                const card = `
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover border-2 border-transparent hover:border-mcqueen-red transition-all relative group">
-                        ${isSoldOut ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-10"><span class="bg-mcqueen-red text-white font-racing text-3xl px-6 py-2 transform -rotate-12 border-4 border-white shadow-xl">ESGOTADO</span></div>' : ''}
-                        
-                        <div class="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
-                            <!-- AQUI ESTÁ A PROTEÇÃO: SE NÃO ACHAR A FOTO NO GIT, MOSTRA O PLACEHOLDER -->
-                            <img src="${gift.image}" 
-                                 alt="${gift.title}" 
-                                 class="w-full h-full object-cover transition transform group-hover:scale-110"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x300/e5e7eb/a3a3a3?text=Foto+do+Presente';">
-                                 
-                            <div class="absolute bottom-0 right-0 bg-rusteze-yellow text-mcqueen-red px-3 py-1 font-bold text-xs rounded-tl-lg border-t border-l border-white">
-                                <i class="fas ${gift.icon}"></i> Valor da Cota: R$ ${gift.quotaValue.toFixed(2).replace('.', ',')}
-                            </div>
-                        </div>
-                        
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl text-gray-800 mb-2 leading-tight">${gift.title}</h3>
-                            
-                            <!-- Barra de Progresso -->
-                            <div class="mt-4 mb-2">
-                                <div class="flex justify-between text-xs font-bold text-gray-500 mb-1">
-                                    <span>Progresso</span>
-                                    <span>${taken}/${gift.totalQuotas} cotas</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden border border-gray-300">
-                                    <div class="bg-gradient-to-r from-yellow-400 to-mcqueen-red h-3 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6 flex items-center justify-between">
-                                ${isSoldOut 
-                                    ? '<button disabled class="w-full bg-gray-400 text-white font-bold py-2 rounded-lg cursor-not-allowed">Completo</button>' 
-                                    : `<button onclick="openCheckout('${gift.id}')" class="w-full bg-mcqueen-red hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center font-racing tracking-wide">
-                                        <i class="fas fa-flag-checkered mr-2"></i> Contribuir
-                                       </button>`
-                                }
-                            </div>
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-lg overflow-hidden border-2 border-transparent hover:border-mcqueen-red transition-all group relative";
+                
+                card.innerHTML = `
+                    ${isSoldOut ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-10"><span class="bg-mcqueen-red text-white font-racing text-3xl px-6 py-2 transform -rotate-12 border-4 border-white">ESGOTADO</span></div>' : ''}
+                    <div class="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <img src="${gift.image}" 
+                             alt="${gift.title}" 
+                             class="w-full h-full object-contain transition transform group-hover:scale-110">
+                        <div class="absolute bottom-0 right-0 bg-rusteze-yellow text-mcqueen-red px-3 py-1 font-bold text-xs rounded-tl-lg">
+                            <i class="fas ${gift.icon}"></i> Cota: R$ ${gift.quotaValue.toFixed(2).replace('.', ',')}
                         </div>
                     </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl text-gray-800 mb-2 leading-tight">${gift.title}</h3>
+                        <div class="mt-4 mb-2">
+                            <div class="flex justify-between text-xs font-bold text-gray-500 mb-1">
+                                <span>Progresso</span>
+                                <span>${taken}/${gift.totalQuotas} cotas</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden border border-gray-300">
+                                <div class="bg-gradient-to-r from-yellow-400 to-mcqueen-red h-3 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                        <button onclick="window.openCheckout('${gift.id}')" ${isSoldOut ? 'disabled' : ''} class="w-full mt-4 bg-mcqueen-red hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow font-racing disabled:opacity-50">
+                            ${isSoldOut ? 'Completo' : 'Contribuir'}
+                        </button>
+                    </div>
                 `;
-                container.innerHTML += card;
+                container.appendChild(card);
             });
         }
 
-        // Funções Globais (acessíveis pelo HTML)
-        
+        // Funções Globais
         window.openCheckout = (giftId) => {
             currentGift = giftsData.find(g => g.id === giftId);
             const taken = quotasTakenMap[giftId] || 0;
-            const maxAvailable = currentGift.totalQuotas - taken;
+            const max = currentGift.totalQuotas - taken;
 
-            if(!currentGift) return;
-
-            // Preenche modal
             document.getElementById('modal-gift-name').innerText = currentGift.title;
-            
-            // Reseta form
             document.getElementById('payment-form').reset();
             document.getElementById('pix-area').classList.add('hidden');
             document.getElementById('btn-action').classList.remove('hidden');
             document.getElementById('btn-confirm').classList.add('hidden');
-            document.getElementById('btn-action').innerHTML = '<span>Gerar Pix</span> <i class="fas fa-qrcode ml-2"></i>';
 
-            // Cria seletor de cotas dinâmico
-            const container = document.getElementById('modal-cotas-count').parentElement;
-            
-            // Remove select antigo se houver
-            const oldSelect = document.getElementById('quota-selector');
-            if(oldSelect) oldSelect.remove();
-
-            // Cria select
-            const select = document.createElement('select');
-            select.id = 'quota-selector';
-            select.className = "bg-white border border-gray-300 rounded px-2 py-1 ml-2 text-sm";
-            for(let i=1; i<=maxAvailable; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = i;
-                select.appendChild(opt);
-            }
-            select.onchange = (e) => updateModalTotal(e.target.value);
-            
-            // Insere no DOM
-            document.getElementById('modal-cotas-count').innerText = ""; 
-            document.getElementById('modal-cotas-count').appendChild(select);
+            const wrapper = document.getElementById('modal-cotas-wrapper');
+            wrapper.innerHTML = `<label class="text-sm font-bold">Quantas cotas?</label> 
+                <select id="quota-selector" class="ml-2 border rounded p-1" onchange="window.updateTotal(this.value)">
+                    ${Array.from({length: max}, (_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+                </select>`;
             
             selectedQuotas = 1;
-            updateModalTotal(1);
-
-            // Abre modal
-            const modal = document.getElementById('checkout-modal');
-            modal.classList.remove('hidden');
-            modal.querySelector('div').classList.add('modal-enter-active');
+            window.updateTotal(1);
+            document.getElementById('checkout-modal').classList.remove('hidden');
         };
 
-        window.updateModalTotal = (qtd) => {
+        window.updateTotal = (qtd) => {
             selectedQuotas = parseInt(qtd);
             const total = selectedQuotas * currentGift.quotaValue;
             document.getElementById('modal-total-value').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         };
 
-        window.closeModal = () => {
-            document.getElementById('checkout-modal').classList.add('hidden');
-        };
+        window.closeModal = () => document.getElementById('checkout-modal').classList.add('hidden');
 
         window.handlePayment = (e) => {
             e.preventDefault();
-            const donorName = document.getElementById('donor-name').value;
-            if(!donorName) return alert("Por favor, digite seu nome!");
-
-            const totalValue = selectedQuotas * currentGift.quotaValue;
-            
-            // Mostra área do Pix
+            const total = selectedQuotas * currentGift.quotaValue;
             document.getElementById('pix-area').classList.remove('hidden');
             document.getElementById('btn-action').classList.add('hidden');
             document.getElementById('btn-confirm').classList.remove('hidden');
 
-            // GERA O PAYLOAD BR CODE (PIX) COM VALOR FIXO
-            // Substitui a chave simples pelo código completo EMV
-            const pixPayload = generatePix(PIX_KEY, PIX_NAME, PIX_CITY, totalValue.toFixed(2), "Presente2Anos");
-            
-            document.getElementById('pix-key-display').value = pixPayload;
-            // Usa o payload completo para gerar o QR Code
-            document.getElementById('pix-qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pixPayload)}`;
+            const payload = generatePix(PIX_KEY, PIX_NAME, PIX_CITY, total.toFixed(2), "Presente2Anos");
+            document.getElementById('pix-key-display').value = payload;
+            document.getElementById('pix-qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(payload)}`;
         };
 
         window.copyPix = () => {
-            const copyText = document.getElementById("pix-key-display");
-            copyText.select();
+            const input = document.getElementById("pix-key-display");
+            input.select();
             document.execCommand("copy");
-            alert("Código Pix copiado! O valor já deve aparecer no app do seu banco.");
+            alert("Código Pix copiado!");
         };
 
         window.confirmDonation = async () => {
-            const donorName = document.getElementById('donor-name').value;
-            
-            const donationData = {
-                giftId: currentGift.id,
-                giftTitle: currentGift.title,
-                quotasBought: selectedQuotas,
-                amountPaid: selectedQuotas * currentGift.quotaValue,
-                donorName: donorName,
-                timestamp: new Date().toISOString()
-            };
-
+            const name = document.getElementById('donor-name').value;
             const btn = document.getElementById('btn-confirm');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            btn.innerText = "Salvando...";
             btn.disabled = true;
 
             try {
-                if (isFirebaseActive) {
-                    // 1. Salva o registro da doação
-                    await addDoc(collection(db, "contribuicoes"), donationData);
-
-                    // 2. Atualiza o contador de cotas do presente
-                    const statusRef = doc(db, "status_presentes", currentGift.id);
-                    
-                    // Import dinâmico necessário para usar setDoc sem erros de importação inicial se o modulo não carregou
-                    const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-                    
-                    await setDoc(statusRef, {
-                        cotasVendidas: increment(selectedQuotas)
-                    }, { merge: true });
-
-                } else {
-                    // MODO DEMO
-                    console.log("Salvando localmente:", donationData);
-                    const currentTaken = quotasTakenMap[currentGift.id] || 0;
-                    quotasTakenMap[currentGift.id] = currentTaken + selectedQuotas;
-                    alert("MODO DEMO (Atenção): Os dados não foram salvos na nuvem porque você não configurou o FirebaseConfig nas linhas 190-197.");
-                    renderGifts();
+                if(isFirebaseActive) {
+                    await addDoc(collection(db, "contribuicoes"), {
+                        giftId: currentGift.id, giftTitle: currentGift.title, quotas: selectedQuotas, 
+                        value: selectedQuotas * currentGift.quotaValue, name: name, date: new Date().toISOString()
+                    });
+                    await setDoc(doc(db, "status_presentes", currentGift.id), { cotasVendidas: increment(selectedQuotas) }, { merge: true });
                 }
-
-                closeModal();
-                alert(`Obrigado, ${donorName}! Seu presente foi registrado com sucesso! 🏎️💨`);
-                
-            } catch (error) {
-                console.error("Erro ao salvar:", error);
-                alert("Ops! Houve um erro ao salvar. Verifique no console (F12) se a chave API está correta.");
+                alert(`Obrigado, ${name}! Presente registrado!`);
+                window.closeModal();
+            } catch(e) {
+                console.error(e);
+                alert("Erro ao salvar. Verifique sua conexão.");
             } finally {
-                btn.innerHTML = 'Já fiz o Pix!';
+                btn.innerText = "Já fiz o Pix!";
                 btn.disabled = false;
             }
         };
 
-        // =========================================================================
-        // GERADOR DE PIX (BR CODE - EMV QRCPS MPM)
-        // Lógica para criar o código copia e cola com valor sem precisar de API
-        // =========================================================================
         function generatePix(key, name, city, amount, txid) {
-            const format = (id, value) => {
-                const len = value.length.toString().padStart(2, '0');
-                return `${id}${len}${value}`;
-            }
-
-            // Normalização simples para remover acentos
             const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-
-            const nameStr = normalize(name).substring(0, 25);
-            const cityStr = normalize(city).substring(0, 15);
-            const amountStr = parseFloat(amount).toFixed(2);
-
-            let payload = "000201";
+            const format = (id, val) => id + val.length.toString().padStart(2, '0') + val;
             
-            // Merchant Account Information (GUI + Chave)
-            // 0014br.gov.bcb.pix = GUI do Pix
-            payload += format("26", `0014br.gov.bcb.pix01${key.length.toString().padStart(2,'0')}${key}`);
-            
-            payload += format("52", "0000"); // Merchant Category Code
-            payload += format("53", "986");  // Transaction Currency (BRL)
-            payload += format("54", amountStr); // Transaction Amount
-            payload += format("58", "BR");   // Country Code
-            payload += format("59", nameStr); // Merchant Name
-            payload += format("60", cityStr); // Merchant City
-            payload += format("62", format("05", txid || "***")); // Additional Data Field Template + Reference Label
-            
-            payload += "6304"; // CRC16 Checksum ID + Length
+            let p = "00020126" + format("00", "br.gov.bcb.pix") + format("01", key);
+            p += format("52", "0000") + format("53", "986") + format("54", amount);
+            p += format("58", "BR") + format("59", normalize(name).substring(0, 25)) + format("60", normalize(city).substring(0, 15));
+            p += format("62", format("05", txid || "***")) + "6304";
 
-            // Cálculo do CRC16 (CCITT-FALSE)
-            const polynomial = 0x1021;
+            const poly = 0x1021;
             let crc = 0xFFFF;
-            
-            for (let i = 0; i < payload.length; i++) {
-                crc ^= (payload.charCodeAt(i) << 8);
-                for (let j = 0; j < 8; j++) {
-                    if ((crc & 0x8000) !== 0) {
-                        crc = (crc << 1) ^ polynomial;
-                    } else {
-                        crc = (crc << 1);
-                    }
-                }
+            for (let i = 0; i < p.length; i++) {
+                crc ^= (p.charCodeAt(i) << 8);
+                for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? (crc << 1) ^ poly : crc << 1;
             }
-            
-            const crcHex = (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
-            return payload + crcHex;
+            return p + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
         }
-
+        
+        window.updateTotal = window.updateTotal;
     </script>
 </body>
 </html>
