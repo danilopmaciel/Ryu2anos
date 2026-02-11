@@ -102,11 +102,18 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+
+        /* Animação de entrada dos nomes */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .donor-item { animation: slideIn 0.5s ease-out forwards; }
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden"> <!-- overflow-hidden impede rolagem inicial -->
 
-    <!-- TELA DE BOAS VINDAS (Garante o play no celular) -->
+    <!-- TELA DE BOAS VINDAS -->
     <div id="splash-screen">
         <h1 class="font-racing text-white text-4xl md:text-6xl mb-8 text-center px-4 drop-shadow-lg">
             Pit Stop do Theo Ryu
@@ -118,10 +125,10 @@
         <p class="text-white mt-6 text-sm opacity-80">Toque para entrar na festa!</p>
     </div>
 
-    <!-- Elemento de Áudio Invisível -->
+    <!-- Áudio Invisível -->
     <audio id="bg-audio" src="mcqueen.m4a" loop preload="auto"></audio>
 
-    <!-- Botão Flutuante de Controle (Mute) -->
+    <!-- Botão Flutuante de Controle -->
     <div id="audio-controls" class="audio-control-container">
         <button id="toggle-btn" onclick="togglePlayback()" class="control-btn">
             <i class="fas fa-volume-up"></i> Som Ligado
@@ -141,11 +148,29 @@
         <div id="gifts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Os presentes aparecem aqui -->
         </div>
+
+        <!-- MURAL DE COLABORADORES (NOVO) -->
+        <section class="max-w-4xl mx-auto mt-16">
+            <div class="bg-white rounded-xl shadow-lg border-t-8 border-rusteze-yellow overflow-hidden">
+                <div class="bg-tire-black text-white p-6 text-center relative overflow-hidden">
+                    <i class="fas fa-trophy text-rusteze-yellow text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-10"></i>
+                    <h2 class="font-racing text-3xl text-rusteze-yellow relative z-10">Equipe de Box 🛠️</h2>
+                    <p class="text-sm opacity-80 mt-1 relative z-10">Quem já ajudou a abastecer essa festa!</p>
+                </div>
+                
+                <div id="donors-list" class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto custom-scrollbar">
+                    <div class="text-center col-span-full text-gray-400 py-8">
+                        <i class="fas fa-circle-notch fa-spin text-2xl"></i>
+                        <p class="mt-2 text-sm">Carregando a equipe...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-tire-black text-white py-8 mt-12 text-center border-t-8 border-rusteze-yellow">
         <p class="font-racing text-xl">Obrigado por participar!</p>
-        <p class="text-xs text-gray-500 mt-2">Versão 11.0 (Áudio m4a)</p>
+        <p class="text-xs text-gray-500 mt-2">Versão 12.0 (Com Mural de Nomes)</p>
     </footer>
 
     <!-- Modal de Pagamento -->
@@ -210,41 +235,32 @@
         let currentGift = null;
         let selectedQuotas = 1;
 
-        // --- LÓGICA DE ÁUDIO (M4A) ---
+        // --- LÓGICA DE ÁUDIO ---
         const audio = document.getElementById('bg-audio');
         const btn = document.getElementById('toggle-btn');
         let isPlaying = false;
 
-        // Função chamada ao clicar no botão "DAR A PARTIDA"
         window.startExperience = () => {
             const splash = document.getElementById('splash-screen');
             const audioControls = document.getElementById('audio-controls');
             
-            // Toca o áudio
             audio.volume = 0.7;
             audio.play().then(() => {
                 isPlaying = true;
                 updateButtonState();
             }).catch(e => console.error("Erro ao tocar áudio:", e));
 
-            // Efeito visual de saída
             splash.style.opacity = '0';
             setTimeout(() => {
                 splash.style.display = 'none';
-                document.body.classList.remove('overflow-hidden'); // Libera rolagem
-                audioControls.classList.add('visible'); // Mostra botão de mute
+                document.body.classList.remove('overflow-hidden');
+                audioControls.classList.add('visible');
             }, 500);
         };
 
-        // Controle de Play/Pause
         window.togglePlayback = () => {
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-            } else {
-                audio.play();
-                isPlaying = true;
-            }
+            if (isPlaying) { audio.pause(); isPlaying = false; } 
+            else { audio.play(); isPlaying = true; }
             updateButtonState();
         };
 
@@ -257,7 +273,6 @@
                 btn.classList.add('stopped');
             }
         }
-        // --- FIM LÓGICA ÁUDIO ---
 
         // Renderiza e conecta Firebase
         renderGifts();
@@ -269,9 +284,60 @@
         } catch (e) { console.error("Modo Offline:", e); }
 
         function listenToUpdates() {
+            // Atualiza progresso
             onSnapshot(collection(db, "status_presentes"), (snapshot) => {
                 snapshot.docs.forEach(doc => quotasTakenMap[doc.id] = doc.data().cotasVendidas || 0);
                 renderGifts();
+            });
+
+            // NOVO: Atualiza lista de doadores
+            // Ordenamos via JavaScript para não exigir criação de índices compostos no Firebase Console
+            onSnapshot(collection(db, "contribuicoes"), (snapshot) => {
+                const donors = [];
+                snapshot.docs.forEach(doc => {
+                    donors.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Ordena do mais recente para o mais antigo
+                donors.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                renderDonors(donors);
+            });
+        }
+
+        function renderDonors(list) {
+            const container = document.getElementById('donors-list');
+            
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center col-span-full text-gray-400 py-4">
+                        <i class="fas fa-flag-checkered mb-2 text-2xl opacity-50"></i>
+                        <p>A pista está vazia... Seja o primeiro a acelerar!</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            list.forEach((donor, index) => {
+                const name = donor.name || "Amigo";
+                const giftTitle = donor.giftTitle || "Presente";
+                const initial = name.charAt(0).toUpperCase();
+                
+                // Cria elemento visual
+                const item = document.createElement('div');
+                item.className = "flex items-center p-3 bg-gray-50 rounded-lg border-l-4 border-mcqueen-red shadow-sm donor-item hover:bg-yellow-50 transition-colors";
+                item.style.animationDelay = `${index * 0.1}s`; // Efeito cascata
+                
+                item.innerHTML = `
+                    <div class="flex-shrink-0 bg-rusteze-yellow text-mcqueen-red rounded-full w-10 h-10 flex items-center justify-center font-racing text-xl mr-3 shadow-inner border-2 border-white">
+                        ${initial}
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-bold text-gray-800 leading-tight truncate">${name}</p>
+                        <p class="text-xs text-gray-500 truncate">Ajudou com: ${giftTitle}</p>
+                    </div>
+                `;
+                container.appendChild(item);
             });
         }
 
