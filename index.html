@@ -145,8 +145,8 @@
             <h1 class="font-racing text-5xl md:text-7xl mb-2 text-shadow">Pit Stop do Theo Ryu</h1>
             <p class="text-xl font-light mb-6">2 Anos de pura velocidade!</p>
 
-            <!-- BOTÃO DE RSVP (MOVIDO PARA CIMA) -->
-            <div class="mb-8">
+            <!-- BOTÃO DE RSVP (AGORA NO TOPO) -->
+            <div class="mb-8 relative z-20">
                 <button onclick="openRSVP()" class="bg-green-500 hover:bg-green-600 text-white font-racing text-xl py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 border-4 border-white animate-bounce">
                     Clique aqui para confirmar presença ✅
                 </button>
@@ -212,7 +212,7 @@
             </div>
         </div>
 
-        <p class="text-xs text-gray-600 mt-6">Versão 17.0 (RSVP no Topo)</p>
+        <p class="text-xs text-gray-600 mt-6">Versão 18.0 (Batch Write Fix)</p>
     </footer>
 
     <!-- Modal de Pagamento (PIX) -->
@@ -278,7 +278,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, increment, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA0p0CtQn66ppjWVZ6ECKTJvYg4W6nfLss",
@@ -378,7 +378,7 @@
             onSnapshot(collection(db, "confirmacoes_presenca"), (snapshot) => {
                 const guests = [];
                 snapshot.docs.forEach(doc => { guests.push({ id: doc.id, ...doc.data() }); });
-                guests.sort((a, b) => new Date(b.date) - new Date(a.date)); // Mais recentes primeiro
+                guests.sort((a, b) => new Date(b.date) - new Date(a.date));
                 renderGuestList(guests);
             });
         }
@@ -593,6 +593,8 @@
             alert("Código Pix copiado!");
         };
 
+        // --- CORREÇÃO DE SEGURANÇA (BATCH WRITE) ---
+        // Garante que o nome e a cota sejam salvos juntos
         window.confirmDonation = async () => {
             const name = document.getElementById('donor-name').value;
             const btn = document.getElementById('btn-confirm');
@@ -601,17 +603,34 @@
 
             try {
                 if(isFirebaseActive) {
-                    await addDoc(collection(db, "contribuicoes"), {
-                        giftId: currentGift.id, giftTitle: currentGift.title, quotas: selectedQuotas, 
-                        value: selectedQuotas * currentGift.quotaValue, name: name, date: new Date().toISOString()
+                    // Prepara o lote de escrita (Batch)
+                    const batch = writeBatch(db);
+
+                    // 1. Prepara a doação na lista de nomes
+                    const newDonationRef = doc(collection(db, "contribuicoes"));
+                    batch.set(newDonationRef, {
+                        giftId: currentGift.id, 
+                        giftTitle: currentGift.title, 
+                        quotas: selectedQuotas, 
+                        value: selectedQuotas * currentGift.quotaValue, 
+                        name: name, 
+                        date: new Date().toISOString()
                     });
-                    await setDoc(doc(db, "status_presentes", currentGift.id), { cotasVendidas: increment(selectedQuotas) }, { merge: true });
+
+                    // 2. Prepara a atualização do contador do presente
+                    const statusRef = doc(db, "status_presentes", currentGift.id);
+                    batch.set(statusRef, { 
+                        cotasVendidas: increment(selectedQuotas) 
+                    }, { merge: true });
+
+                    // 3. Envia tudo junto para o banco
+                    await batch.commit();
                 }
                 alert(`Obrigado, ${name}! Presente registrado!`);
                 window.closeModal();
             } catch(e) {
                 console.error(e);
-                alert("Erro ao salvar. Verifique sua conexão.");
+                alert("Erro ao salvar. Verifique sua conexão ou tente recarregar a página.");
             } finally {
                 btn.innerText = "Já fiz o Pix!";
                 btn.disabled = false;
